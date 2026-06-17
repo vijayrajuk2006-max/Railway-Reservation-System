@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Railway Reservation System</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#f4f6f9;
+}
+
+header{
+background:#34495e;
+color:white;
+text-align:center;
+padding:20px;
+}
+
+.container{
+width:90%;
+margin:20px auto;
+}
+
+.booking-box{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 10px rgba(0,0,0,0.1);
+margin-bottom:20px;
+}
+
+input,select{
+width:100%;
+padding:10px;
+margin:10px 0;
+border:1px solid #ccc;
+border-radius:5px;
+}
+
+.seats{
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:10px;
+margin:15px 0;
+}
+
+.seat{
+background:#3498db;
+color:white;
+padding:12px;
+text-align:center;
+border-radius:5px;
+cursor:pointer;
+}
+
+.seat.selected{
+background:#27ae60;
+}
+
+button{
+padding:10px 15px;
+border:none;
+border-radius:5px;
+cursor:pointer;
+background:#27ae60;
+color:white;
+}
+
+button:hover{
+background:#219150;
+}
+
+.cancel{
+background:red;
+}
+
+.summary{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 10px rgba(0,0,0,0.1);
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>🚆 Railway Reservation System</h1>
+</header>
+
+<div class="container">
+
+<div class="booking-box">
+
+<h2>Book Train Ticket</h2>
+
+<input type="text" id="passenger"
+placeholder="Passenger Name">
+
+<select id="train">
+<option value="450">Express Train - ₹450</option>
+<option value="650">Superfast Express - ₹650</option>
+<option value="850">Rajdhani Express - ₹850</option>
+<option value="1200">Vande Bharat Express - ₹1200</option>
+</select>
+
+<h3>Select Seat</h3>
+
+<div class="seats" id="seatContainer"></div>
+
+<button onclick="bookTicket()">
+Book Ticket
+</button>
+
+</div>
+
+<div class="summary">
+<h2>Ticket Summary</h2>
+<p id="summary">
+No ticket booked.
+</p>
+</div>
+
+</div>
+
+<script>
+
+let selectedSeat = null;
+
+const seatContainer =
+document.getElementById("seatContainer");
+
+for(let i=1;i<=30;i++){
+
+let seat=document.createElement("div");
+
+seat.classList.add("seat");
+
+seat.innerText=i;
+
+seat.onclick=function(){
+
+document.querySelectorAll(".seat")
+.forEach(s=>s.classList.remove("selected"));
+
+seat.classList.add("selected");
+
+selectedSeat=i;
+};
+
+seatContainer.appendChild(seat);
+}
+
+function bookTicket(){
+
+let passenger =
+document.getElementById("passenger").value;
+
+if(passenger==="" || selectedSeat===null){
+
+alert("Enter passenger name and select a seat");
+return;
+}
+
+let trainSelect =
+document.getElementById("train");
+
+let trainName =
+trainSelect.options[
+trainSelect.selectedIndex
+].text.split(" - ")[0];
+
+let fare =
+parseInt(trainSelect.value);
+
+document.getElementById("summary").innerHTML=
+`
+<b>Passenger:</b> ${passenger}<br>
+<b>Train:</b> ${trainName}<br>
+<b>Seat No:</b> ${selectedSeat}<br>
+<b>Fare:</b> ₹${fare}<br><br>
+
+<button class="cancel"
+onclick="cancelTicket()">
+Cancel Ticket
+</button>
+`;
+}
+
+function cancelTicket(){
+
+selectedSeat=null;
+
+document.querySelectorAll(".seat")
+.forEach(s=>s.classList.remove("selected"));
+
+document.getElementById("passenger").value="";
+
+document.getElementById("summary").innerHTML=
+"No ticket booked.";
+}
+
+</script>
+
+</body>
+</html>
